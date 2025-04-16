@@ -61,10 +61,11 @@ Navigate to the `.vscode` folder to see how each of these Tasks are implemented
 
 ## Googletest on CMake-based Project
 ### Adding Googletest
-
+- Add `Testing Setup` and `Testing Directories`
+- Create `test/CMakeLists.txt` with appropriate tests
 
 ### Breaking down CMakeLists
-- `{root}/CMakeLists.txt`
+- Project CMakeLists: `{root}/CMakeLists.txt`
     - Library & Executables section
         - `add_library`: creates XXX_lib for each "sub component"
         - `add_executable`: creates mains executable
@@ -75,7 +76,14 @@ Navigate to the `.vscode` folder to see how each of these Tasks are implemented
         - `FetchContent_MakeAvailable`: use the googletest
         - `enable_testing`: enables `CTest`
         - `add_subdirectory`: adds all tests directories
-- `{root}/tests/CMakeLists.txt`
+- Sub Component CMakeLists: `{root}/tests/CMakeLists.txt`
+    - <TBD>
+- Test Component CMakeLists: `{root}/tests/CMakeLists.txt`
     - `add_executable`: creates tests executable
     - `target_link_libraries`: links all libraries (sub components) to the test executable, including the GTest::gtest
-- References on CMake: TBD
+
+### Learning CMake
+- References on CMake:
+    - Intro to CMake
+    - CMake API Reference
+    - Creating complex components/foldering structure: <TBD>
