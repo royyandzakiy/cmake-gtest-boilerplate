@@ -1,34 +1,7 @@
 {
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "clean",
-            "type": "shell",
-            "command": "rmdir",
-            "args": [
-                "/s",
-                "/q",
-                "${workspaceFolder}\\build"
-            ],
-            "group": "build",
-            "problemMatcher": [],
-            "detail": "Delete build directory"
-        },
-        {
-            "label": "clean-rebuild",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/c",
-                "rmdir /s /q ${workspaceFolder}\\build && cmake -S . -B ${workspaceFolder}\\build -G \"Visual Studio 17 2022\" -A x64 && cmake --build ${workspaceFolder}\\build --config Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "detail": "Full clean rebuild",
-            "dependsOrder": "sequence"
-        },
+        // CMAKE TASKS
         {
             "label": "cmake-configure",
             "type": "shell",
@@ -67,21 +40,57 @@
             "detail": "Build project",
             "dependsOn": ["cmake-configure"]
         },
+
+        // CLEAN TASKS
         {
-            "label": "run-tests",
+            "label": "clean",
             "type": "shell",
-            "command": "cd ${workspaceFolder}\\build && ctest -C Debug --output-on-failure",
-            "group": "test",
+            "command": "rmdir",
+            "args": [
+                "/s",
+                "/q",
+                "${workspaceFolder}\\build"
+            ],
+            "group": "build",
             "problemMatcher": [],
-            "dependsOn": ["build"]
+            "detail": "Delete build directory"
         },
         {
-            "label": "run-main",
+            "label": "clean-rebuild",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "rmdir /s /q ${workspaceFolder}\\build && cmake -S . -B ${workspaceFolder}\\build -G \"Visual Studio 17 2022\" -A x64 && cmake --build ${workspaceFolder}\\build --config Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "detail": "Full clean rebuild",
+            "dependsOrder": "sequence"
+        },
+
+
+        // RUN TASKS
+        {
+            "label": "Run: main",
             "type": "shell",
             "command": "${workspaceFolder}\\build\\Debug\\hello_world.exe",
             "group": "test",
             "problemMatcher": [],
+            "detail": "Run Main Application",
             "dependsOn": ["build"]
-        }
+        },
+        {
+            "label": "Run: Tests",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\build && ctest -C Debug --output-on-failure",
+            "group": "test",
+            "problemMatcher": [],
+            "detail": "Run Test Suite",
+            "dependsOn": ["build"]
+        },
+        
     ]
 }
