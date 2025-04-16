@@ -6,8 +6,7 @@ add_executable(hello_tests
 target_link_libraries(hello_tests
     PRIVATE
     hello_lib
-    # GTest::gtest_main
-    GTest::gtest
+    GTest::gtest # alternatively use GTest::gtest_main to not manually create main with ::testing::InitGoogleTest
 )
 
 include(GoogleTest)
