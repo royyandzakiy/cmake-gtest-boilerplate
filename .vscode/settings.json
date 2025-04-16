@@ -1,0 +1,22 @@
+{
+    "terminal.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe",
+    "terminal.integrated.shellArgs.windows": ["/k"],
+    "cmake.configureOnOpen": true,
+    "cmake.buildDirectory": "${workspaceFolder}\\build",
+    "cmake.generator": "Visual Studio 17 2022",
+    "cmake.preferredGenerators": [
+        "Visual Studio 17 2022",
+        "Ninja"
+    ],
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "cmake.buildBeforeRun": true,
+    "files.associations": {
+        "*.cpp": "cpp",
+        "*.h": "cpp"
+    },
+    "cmake.options": {
+        "args": ["-A", "x64"]
+    },
+    "task.quickOpen.includeBuild": true,
+    "task.quickOpen.skip": false
+}
