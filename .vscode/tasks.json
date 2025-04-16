@@ -74,7 +74,7 @@
 
         // RUN TASKS
         {
-            "label": "Run: main",
+            "label": "Build & Run: main",
             "type": "shell",
             "command": "${workspaceFolder}\\build\\Debug\\hello_world.exe",
             "group": "test",
@@ -83,7 +83,7 @@
             "dependsOn": ["build"]
         },
         {
-            "label": "Run: Tests",
+            "label": "Build & Run: Tests",
             "type": "shell",
             "command": "cd ${workspaceFolder}\\build && ctest -C Debug --output-on-failure",
             "group": "test",
