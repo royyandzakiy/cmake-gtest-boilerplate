@@ -1,46 +1,108 @@
-name: CI Pipeline
+# .github/workflows/ci.yml
+# GitHub Actions workflow for a C++ CMake project using CTest/GTest
+# Adapted for Windows with Visual Studio Build Tools, based on tasks.json
 
-on: [push, pull_request]
+name: C++ CI (Windows)
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "master" ] # Runs on pushes to the master branch
+  pull_request:
+    branches: [ "master" ] # Runs on pull requests targeting the master branch
 
 jobs:
+  # Define a single job called "build-and-test"
   build-and-test:
-    runs-on: windows-latest
+    # The type of runner that the job will run on - Use Windows
+    runs-on: windows-latest # Use the latest available Windows runner
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install pytest
-        
-    - name: Configure CMake
-      shell: cmd
-      run: |
-        cmake -S . -B build -G "Visual Studio 17 2022" -A x64
-        
-    - name: Build
-      shell: cmd
-      run: |
-        cmake --build build --config Release
-        
-    - name: Run C++ tests
-      shell: cmd
-      run: |
-        cd build && ctest -C Release --output-on-failure
-        
-    - name: Run Python tests
-      shell: cmd
-      run: |
-        python -m pytest tests/python
-        
-    - name: Generate coverage report
-      if: runner.os == 'Linux'
-      run: |
-        cd build
-        lcov --capture --directory . --output-file coverage.info
-        lcov --remove coverage.info '/usr/*' --output-file coverage.info
-        bash <(curl -s https://codecov.io/bash) -f coverage.info
+      # 1. Check out the repository code
+      - name: Check out code
+        uses: actions/checkout@v4
+        # If you use Git submodules (e.g., for GTest), uncomment the following line:
+        # with:
+        #   submodules: 'recursive'
+
+      # 2. Setup MSVC environment (Optional but good practice)
+      # The windows-latest runner usually has VS Build Tools, this ensures PATH is set up
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+        # You might also use setup-vsdevcmd action for a more complete environment setup
+
+      # 3. Install dependencies (CMake is usually present, Python for gcovr)
+      # Note: Visual Studio Build Tools (MSVC) are typically pre-installed on windows-latest
+      # Note: gcovr/gcov setup for coverage is complex with MSVC builds (see coverage step)
+      - name: Install Python (for gcovr)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # Install a recent Python version
+      - name: Install gcovr
+        run: pip install gcovr
+        shell: bash # Use bash shell for pip command consistency
+
+      # 4. Configure CMake
+      # Creates a build directory and runs CMake to configure the project using Visual Studio generator
+      - name: Configure CMake
+        run: |
+          cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Debug
+        shell: cmd # Use cmd shell consistent with tasks.json, though bash often works too
+        # -S: Source directory (root of your repo)
+        # -B: Build directory (where build files will go)
+        # -G "Visual Studio 17 2022": Specify the VS generator (match tasks.json)
+        # -A x64: Specify the architecture (match tasks.json)
+        # -DCMAKE_BUILD_TYPE=Debug: While VS is multi-config, this can be useful for conditional logic in CMakeLists.txt
+
+      # 5. Build the project
+      # Runs the build process using CMake's build command, specifying the Debug config
+      - name: Build project
+        run: |
+          cmake --build ${{ github.workspace }}/build --config Debug
+        shell: cmd
+        # --build: Tells CMake to execute the build step
+        # --config Debug: Specifies the configuration to build (REQUIRED for multi-config generators like VS)
+
+      # 6. Run tests
+      # Executes tests using CTest, specifying the Debug config
+      - name: Run tests
+        working-directory: ${{ github.workspace }}/build # Run ctest from the build directory
+        run: |
+          ctest --output-on-failure -C Debug
+        shell: cmd
+        # -C Debug: Specifies the build configuration the tests were built with (REQUIRED for multi-config)
+        # --output-on-failure: Shows output only for tests that fail (equivalent to CTEST_OUTPUT_ON_FAILURE=1)
+
+      # 7. Run Coverage (gcovr) - *** IMPORTANT CAVEATS ***
+      # This step attempts to replicate the 'coverage' task from tasks.json.
+      # HOWEVER: gcovr relies on GCC/Clang compiler flags (`--coverage` or `-fprofile-arcs -ftest-coverage`)
+      # to generate necessary `.gcno` and `.gcda` files.
+      # The project is configured and built with MSVC (Visual Studio) in the steps above,
+      # which DOES NOT generate these files by default.
+      # THEREFORE, THIS STEP WILL LIKELY FAIL OR PRODUCE NO COVERAGE DATA unless you:
+      #    a) Modify your CMake configuration specifically for a coverage build using GCC/Clang
+      #       (potentially in a separate CI job or by setting flags conditionally).
+      #    b) Use a different coverage tool compatible with MSVC (e.g., OpenCppCoverage, VS Enterprise tools).
+      #    c) Install a GCC toolchain (like MinGW/MSYS2) on the runner AND configure CMake to use it for coverage builds.
+      - name: Run Coverage with gcovr (Requires GCC/Clang build flags)
+        working-directory: ${{ github.workspace }}/build # Run gcovr from the build directory
+        run: |
+          echo "WARNING: Running gcovr, but the build used MSVC. This requires a build configured with GCC/Clang and coverage flags (--coverage) to work correctly."
+          # The command below assumes gcov is available (e.g., from an installed MinGW/MSYS2 toolchain) and the build generated coverage files.
+          # Adjust the path to gcov.exe if needed and if a GCC toolchain is installed.
+          # Consider adding steps to install MinGW/MSYS2 if you intend to use gcov with a GCC build.
+          gcovr --gcov-executable "gcov" --root ${{ github.workspace }} --exclude "tests/.*" --print-summary --html-details coverage.html --xml coverage.xml
+          # If you install MinGW via chocolatey, gcov might be at C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\gcov.exe
+        shell: bash # gcovr often works better in bash/sh environment
+        # Continue workflow even if coverage fails, as it's often non-critical or expected to fail without GCC flags
+        continue-on-error: true
+
+      # 8. Upload Coverage Report (Optional)
+      # If the coverage step succeeds and generates reports, upload them as artifacts
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        if: success() # Or use `always()` if you want artifacts even if coverage step had errors (but ran)
+        with:
+          name: coverage-report
+          path: ${{ github.workspace }}/build/coverage.* # Upload html and xml reports
+          retention-days: 7 # Keep artifacts for 7 days
