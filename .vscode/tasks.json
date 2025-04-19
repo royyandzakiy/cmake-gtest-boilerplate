@@ -23,13 +23,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "${workspaceFolder}\\build",
-                "--config",
-                "Debug"
-            ],
+            "command": "cmake --build ${workspaceFolder}\\build --config Debug",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -76,7 +70,7 @@
         {
             "label": "Build & Run: main",
             "type": "shell",
-            "command": "${workspaceFolder}\\build\\Debug\\hello_world.exe",
+            "command": "${workspaceFolder}\\build\\app\\Debug\\hello_world.exe",
             "group": "test",
             "problemMatcher": [],
             "detail": "Run Main Application",
@@ -85,12 +79,26 @@
         {
             "label": "Build & Run: Tests",
             "type": "shell",
-            "command": "cd ${workspaceFolder}\\build && ctest -C Debug --output-on-failure",
+            "command": "set CTEST_OUTPUT_ON_FAILURE=1 && ctest -C Debug --test-dir ${workspaceFolder}/build --output-on-failure",
             "group": "test",
             "problemMatcher": [],
             "detail": "Run Test Suite",
             "dependsOn": ["build"]
         },
         
+        // COVERAGE
+        {
+            "label": "coverage",
+            "type": "shell",
+            // "command": "cd build && gcovr --gcov-executable gcov --exclude tests/ --txt-metric branch --print-summary --html-details coverage.html --xml coverage.xml",
+            // "command": "cd build && gcovr --gcov-executable gcov --exclude tests/ --verbose --html-details coverage.html --xml coverage.xml",
+            "command": "cd build && gcovr --gcov-executable \"C:\\MinGW\\bin\\gcov.exe\" --root ${workspaceFolder} --exclude tests/ --print-summary --html-details coverage.html --xml coverage.xml",
+            "dependsOn": "test",
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
     ]
 }

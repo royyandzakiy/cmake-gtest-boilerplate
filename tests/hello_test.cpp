@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/hello.h"
+#include "../hello/include/hello.h"
 
 TEST(HelloTest, OutputCheck) {
     EXPECT_EQ(hello_world(), "Hello, World from C++17!");

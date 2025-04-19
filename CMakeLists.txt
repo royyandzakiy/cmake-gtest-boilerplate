@@ -7,9 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ------------- Library & Executable Directories ------------- 
 # Add main library and executable
-add_library(hello_lib src/hello.cpp src/hello.h)      # create libraries here from different .h and .cpp
-add_executable(hello_world src/main.cpp)              # main executable
-target_link_libraries(hello_world PRIVATE hello_lib)  # link the main to the different libraries
+# add_library(hello_lib src/hello.cpp src/hello.h)      # create libraries here from different .h and .cpp
+# add_executable(hello_world src/main.cpp)              # main executable
+# target_link_libraries(hello_world PRIVATE hello_lib)  # link the main to the different libraries
 
 # ------------- Testing Setup ------------- 
 # Download and configure GoogleTest
@@ -24,6 +24,14 @@ FetchContent_MakeAvailable(googletest)
 # Enable testing
 enable_testing()
 
+# Enable coverage for GCC/MinGW
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-fprofile-arcs -ftest-coverage)
+    add_link_options(--coverage)
+endif()
+
 # ------------- Testing Directories ------------- 
-# Add tests subdirectory
+# Add subprojects
+add_subdirectory(hello)
+add_subdirectory(app)
 add_subdirectory(tests)

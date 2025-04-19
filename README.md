@@ -87,3 +87,11 @@ Navigate to the `.vscode` folder to see how each of these Tasks are implemented
     - Intro to CMake
     - CMake API Reference
     - Creating complex components/foldering structure: <TBD>
+
+---
+
+## Development Notes
+- [ ] Solve issue with GCov (expected to printout coverage test)
+- [ ] Implement GDB Task
+- [ ] Refactor foldering using `components/`. Make sure each components have their own `CMakeLists.txt`
+- [ ] Try out `ci.yml` through Github Actions

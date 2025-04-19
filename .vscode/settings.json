@@ -18,5 +18,19 @@
         "args": ["-A", "x64"]
     },
     "task.quickOpen.includeBuild": true,
-    "task.quickOpen.skip": false
+    "task.quickOpen.skip": false,
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "showElapsed": true,
+                "autoShowOutputPanel": "error",
+                "match": "\\.(cpp|h|hpp|c|cc|cmake|txt)$", // Regex matching relevant files
+                "isAsync": true, // Run in background
+
+                "cmd": "cmake --build ${workspaceFolder}\\build --config Debug && set CTEST_OUTPUT_ON_FAILURE=1 && ctest -C Debug --test-dir ${workspaceFolder}/build --output-on-failure"
+                // Or potentially run a custom script:
+                // "cmd": "${workspaceFolder}/scripts/build_and_test.sh"
+            }
+        ]
+    }
 }
