@@ -13,7 +13,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" OR WIN32)
     add_link_options(--coverage)
 endif()
 
-add_library(hello 
+add_library(hello SHARED
     src/hello.cpp
     include/hello.h
 )

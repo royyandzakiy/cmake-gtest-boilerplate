@@ -35,7 +35,7 @@
             "detail": "Delete build directory"
         },
         {
-            "label": "Clean & Build",
+            "label": "Clean, Configure & Build",
             "type": "shell",
             "command": "cmd",
             "args": [
@@ -64,7 +64,7 @@
         {
             "label": "Build & Run: Tests",
             "type": "shell",
-            "command": "set CTEST_OUTPUT_ON_FAILURE=1 && ctest -C Debug --test-dir ${workspaceFolder}/build --output-on-failure",
+            "command": "set CTEST_OUTPUT_ON_FAILURE=1 && ctest -C Debug --test-dir ${workspaceFolder}/build --output-on-failure && python -m pytest tests/python",
             "group": "test",
             "problemMatcher": [],
             "detail": "Run Test Suite",
