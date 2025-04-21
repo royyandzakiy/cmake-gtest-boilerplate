@@ -67,7 +67,8 @@
         {
             "label": "Build & Run: Tests (Windows)",
             "type": "shell",
-            "command": "set CTEST_OUTPUT_ON_FAILURE=1 && ctest -C Debug --test-dir ${workspaceFolder}/build --output-on-failure",
+            // "command": "ctest -C Debug --test-dir ${workspaceFolder}/build --output-on-failure", // if instead prefer using ctest
+            "command": "pytest -vv",
             "group": "test",
             "problemMatcher": [],
             "detail": "Run Test Suite on Windows",
@@ -88,98 +89,99 @@
             "detail": "Generate test coverage report using gcovr on Windows"
         },
 
-        // --- LINUX TASKS (Added) ---
+        // // --- LINUX TASKS (Added) ---
 
-        // CMAKE TASKS (Linux)
-        {
-            "label": "CMake: Configure (Linux)",
-            "type": "shell",
-            // Omit -G to let CMake pick the default (usually Unix Makefiles)
-            // Omit -A x64 as it's not standard for Unix Makefiles
-            "command": "cmake -S . -B ${workspaceFolder}/build",
-            "group": "build",
-            "problemMatcher": [
-                 "$cmake"
-            ],
-            "detail": "Configure CMake project for Linux"
-        },
-        {
-            "label": "CMake: Build (Linux)",
-            "type": "shell",
-            // Assuming a single-config build on Linux, remove --config Debug
-            "command": "cmake --build ${workspaceFolder}/build",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": [
-                 "$cmake"
-            ],
-            "detail": "Build project for Linux",
-            "dependsOn": ["CMake: Configure (Linux)"]
-        },
+        // // CMAKE TASKS (Linux)
+        // {
+        //     "label": "CMake: Configure (Linux)",
+        //     "type": "shell",
+        //     // Omit -G to let CMake pick the default (usually Unix Makefiles)
+        //     // Omit -A x64 as it's not standard for Unix Makefiles
+        //     "command": "cmake -S . -B ${workspaceFolder}/build",
+        //     "group": "build",
+        //     "problemMatcher": [
+        //          "$cmake"
+        //     ],
+        //     "detail": "Configure CMake project for Linux"
+        // },
+        // {
+        //     "label": "CMake: Build (Linux)",
+        //     "type": "shell",
+        //     // Assuming a single-config build on Linux, remove --config Debug
+        //     "command": "cmake --build ${workspaceFolder}/build",
+        //     "group": {
+        //         "kind": "build",
+        //         "isDefault": true
+        //     },
+        //     "problemMatcher": [
+        //          "$cmake"
+        //     ],
+        //     "detail": "Build project for Linux",
+        //     "dependsOn": ["CMake: Configure (Linux)"]
+        // },
 
-        // CLEAN TASKS (Linux)
-        {
-            "label": "Clean (Linux)",
-            "type": "shell",
-            // Use rm -rf for recursive force deletion
-            "command": "rm -rf ${workspaceFolder}/build",
-            "group": "build",
-            "problemMatcher": [],
-            "detail": "Delete build directory on Linux"
-        },
-        {
-            "label": "Clean, Configure & Build (Linux)",
-            "type": "shell",
-            // Chain commands using && in bash
-            "command": "rm -rf ${workspaceFolder}/build && cmake -S . -B ${workspaceFolder}/build && cmake --build ${workspaceFolder}/build",
-            "group": "build",
-            "problemMatcher": [
-                 "$cmake"
-            ],
-            "detail": "Full clean rebuild for Linux",
-            "dependsOrder": "sequence"
-        },
+        // // CLEAN TASKS (Linux)
+        // {
+        //     "label": "Clean (Linux)",
+        //     "type": "shell",
+        //     // Use rm -rf for recursive force deletion
+        //     "command": "rm -rf ${workspaceFolder}/build",
+        //     "group": "build",
+        //     "problemMatcher": [],
+        //     "detail": "Delete build directory on Linux"
+        // },
+        // {
+        //     "label": "Clean, Configure & Build (Linux)",
+        //     "type": "shell",
+        //     // Chain commands using && in bash
+        //     "command": "rm -rf ${workspaceFolder}/build && cmake -S . -B ${workspaceFolder}/build && cmake --build ${workspaceFolder}/build",
+        //     "group": "build",
+        //     "problemMatcher": [
+        //          "$cmake"
+        //     ],
+        //     "detail": "Full clean rebuild for Linux",
+        //     "dependsOrder": "sequence"
+        // },
 
-        // RUN TASKS (Linux)
-        {
-            "label": "Build & Run: main (Linux)",
-            "type": "shell",
-            // Change path separators and remove .exe
-            // Assuming the executable is directly in the build/app directory for a single-config build
-            "command": "${workspaceFolder}/build/app/hello_world",
-            "group": "test",
-            "problemMatcher": [],
-            "detail": "Run Main Application on Linux",
-            "dependsOn": ["CMake: Build (Linux)"]
-        },
-        {
-            "label": "Build & Run: Tests (Linux)",
-            "type": "shell",
-            // Set environment variable directly in the command
-            // Assuming tests are built in the default configuration (no -C Debug needed)
-            "command": "CTEST_OUTPUT_ON_FAILURE=1 ctest --test-dir ${workspaceFolder}/build --output-on-failure",
-            "group": "test",
-            "problemMatcher": [],
-            "detail": "Run Test Suite on Linux",
-            "dependsOn": ["CMake: Build (Linux)"]
-        },
+        // // RUN TASKS (Linux)
+        // {
+        //     "label": "Build & Run: main (Linux)",
+        //     "type": "shell",
+        //     // Change path separators and remove .exe
+        //     // Assuming the executable is directly in the build/app directory for a single-config build
+        //     "command": "${workspaceFolder}/build/app/hello_world",
+        //     "group": "test",
+        //     "problemMatcher": [],
+        //     "detail": "Run Main Application on Linux",
+        //     "dependsOn": ["CMake: Build (Linux)"]
+        // },
+        // {
+        //     "label": "Build & Run: Tests (Linux)",
+        //     "type": "shell",
+        //     // Set environment variable directly in the command
+        //     // Assuming tests are built in the default configuration (no -C Debug needed)
+        //     // "command": "CTEST_OUTPUT_ON_FAILURE=1 ctest --test-dir ${workspaceFolder}/build --output-on-failure", // if instead prefer using ctest
+        //     "command": "pytest -vv",
+        //     "group": "test",
+        //     "problemMatcher": [],
+        //     "detail": "Run Test Suite on Linux",
+        //     "dependsOn": ["CMake: Build (Linux)"]
+        // },
 
-        // COVERAGE (Linux)
-        {
-            "label": "GCov: Test Coverage (Linux)",
-            "type": "shell",
-            // Use default gcov executable, change path separators
-            "command": "cd build && gcovr --gcov-executable gcov --root ${workspaceFolder} --exclude tests/ --print-summary --html-details coverage.html --xml coverage.xml",
-            "dependsOn": "Build & Run: Tests (Linux)", // Depends on the Linux test task
-            "problemMatcher": [],
-            "group": {
-                "kind": "test",
-                "isDefault": true // Set this as the default test task
-            },
-            "detail": "Generate test coverage report using gcovr on Linux"
-        }
+        // // COVERAGE (Linux)
+        // {
+        //     "label": "GCov: Test Coverage (Linux)",
+        //     "type": "shell",
+        //     // Use default gcov executable, change path separators
+        //     "command": "cd build && gcovr --gcov-executable gcov --root ${workspaceFolder} --exclude tests/ --print-summary --html-details coverage.html --xml coverage.xml",
+        //     "dependsOn": "Build & Run: Tests (Linux)", // Depends on the Linux test task
+        //     "problemMatcher": [],
+        //     "group": {
+        //         "kind": "test",
+        //         "isDefault": true // Set this as the default test task
+        //     },
+        //     "detail": "Generate test coverage report using gcovr on Linux"
+        // }
     ]
 }
 

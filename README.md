@@ -14,6 +14,13 @@ This project is a bare minimum project to add Google Test to a CMake based proje
     git clone https://github.com/royyandzakiy/cmake-gtest-boilerplate.git
     ```
 
+- Prepare Python Virtual Environment (venv)
+    ```bash
+    python -m venv .venv # run this if .venv not exist, just one time
+    .venv\Scripts\activate.bat
+    pip install pytest pytest-cpp gcovr
+    ```
+
 - Build
     ```bash
     # clean
@@ -31,7 +38,7 @@ This project is a bare minimum project to add Google Test to a CMake based proje
 
 - Run test
     ```bash
-    cd ".\\build" && ctest -C Debug --output-on-failure
+    pytest -vv
     ```
 
 ### Running using VSCode Tasks
@@ -91,7 +98,8 @@ Navigate to the `.vscode` folder to see how each of these Tasks are implemented
 ---
 
 ## Development Notes
+- [v] fix `ci.yml` through Github Actions
 - [ ] Solve issue with GCov (expected to printout coverage test)
 - [ ] Implement GDB Task
 - [ ] Refactor foldering using `components/`. Make sure each components have their own `CMakeLists.txt`
-- [ ] Try out `ci.yml` through Github Actions
+- [ ] Consider adding `build_script.sh` and `build_script.cmd` to enable seamless build in Linux/Windows environments

@@ -5,12 +5,6 @@ project(HelloWorld LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# ------------- Library & Executable Directories ------------- 
-# Add main library and executable
-# add_library(hello_lib src/hello.cpp src/hello.h)      # create libraries here from different .h and .cpp
-# add_executable(hello_world src/main.cpp)              # main executable
-# target_link_libraries(hello_world PRIVATE hello_lib)  # link the main to the different libraries
-
 # ------------- Testing Setup ------------- 
 # Download and configure GoogleTest
 include(FetchContent)

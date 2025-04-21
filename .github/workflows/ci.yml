@@ -39,7 +39,7 @@ jobs:
         with:
           python-version: '3.x' # Install a recent Python version
       - name: Install gcovr
-        run: pip install gcovr
+        run: pip install pytest pytest-cpp gcovr
         shell: bash # Use bash shell for pip command consistency
 
       # 4. Configure CMake
@@ -66,9 +66,8 @@ jobs:
       # 6. Run tests
       # Executes tests using CTest, specifying the Debug config
       - name: Run tests
-        working-directory: ${{ github.workspace }}/build # Run ctest from the build directory
         run: |
-          ctest --output-on-failure -C Debug
+          pytest -vv
         shell: cmd
         # -C Debug: Specifies the build configuration the tests were built with (REQUIRED for multi-config)
         # --output-on-failure: Shows output only for tests that fail (equivalent to CTEST_OUTPUT_ON_FAILURE=1)
