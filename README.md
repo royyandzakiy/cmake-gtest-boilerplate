@@ -14,10 +14,11 @@ This project is a bare minimum project to add Google Test to a CMake based proje
     git clone https://github.com/royyandzakiy/cmake-gtest-boilerplate.git
     ```
 
-- Prepare Python Virtual Environment (venv)
+- Prepare Python Virtual Environment (venv) to install all dependencies
     ```bash
-    python -m venv .venv # run this if .venv not exist, just one time
-    .venv\Scripts\activate.bat
+    python -m venv .venv            # if the first time, run this (if .venv not yet exist in this root folder)
+    python -m ensurepip --upgrade   # install pip
+    .venv\Scripts\activate.bat      # Linux: ./.venv/Scripts/activate
     pip install pytest pytest-cpp gcovr
     ```
 
