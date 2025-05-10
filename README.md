@@ -110,3 +110,6 @@ Navigate to the `.vscode` folder to see how each of these Tasks are implemented
     - [ ] Implement GDB Task
     - [ ] Refactor foldering using `components/`. Make sure each components have their own `CMakeLists.txt`
     - [ ] Consider adding `build_script.sh` and `build_script.cmd` to enable seamless build in Linux/Windows environments
+    - Learn Developer Experience
+        - [Google's SRE Book](https://sre.google/books/)
+        - The Pheonix Project & The Unicorn Project
