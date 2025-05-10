@@ -96,13 +96,13 @@ jobs:
         # Continue workflow even if coverage fails, as it's often non-critical or expected to fail without GCC flags
         continue-on-error: true
 
-      # 8. Upload Coverage Report (Optional)
-      # If the coverage step succeeds and generates reports, upload them as artifacts
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v3
-        # if: success() # Or use `always()` if you want artifacts even if coverage step had errors (but ran)
-        if: always()
-        with:
-          name: coverage-report
-          path: ${{ github.workspace }}/build/coverage.* # Upload html and xml reports
-          retention-days: 7 # Keep artifacts for 7 days
+      # # 8. Upload Coverage Report (Optional)
+      # # If the coverage step succeeds and generates reports, upload them as artifacts
+      # - name: Upload Coverage Report
+      #   uses: actions/upload-artifact@v3
+      #   # if: success() # Or use `always()` if you want artifacts even if coverage step had errors (but ran)
+      #   if: always()
+      #   with:
+      #     name: coverage-report
+      #     path: ${{ github.workspace }}/build/coverage.* # Upload html and xml reports
+      #     retention-days: 7 # Keep artifacts for 7 days
