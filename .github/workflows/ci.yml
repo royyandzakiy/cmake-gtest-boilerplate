@@ -100,7 +100,8 @@ jobs:
       # If the coverage step succeeds and generates reports, upload them as artifacts
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v3
-        if: success() # Or use `always()` if you want artifacts even if coverage step had errors (but ran)
+        # if: success() # Or use `always()` if you want artifacts even if coverage step had errors (but ran)
+        if: always()
         with:
           name: coverage-report
           path: ${{ github.workspace }}/build/coverage.* # Upload html and xml reports

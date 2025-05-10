@@ -99,8 +99,14 @@ Navigate to the `.vscode` folder to see how each of these Tasks are implemented
 ---
 
 ## Development Notes
-- [v] fix `ci.yml` through Github Actions
-- [ ] Solve issue with GCov (expected to printout coverage test)
-- [ ] Implement GDB Task
-- [ ] Refactor foldering using `components/`. Make sure each components have their own `CMakeLists.txt`
-- [ ] Consider adding `build_script.sh` and `build_script.cmd` to enable seamless build in Linux/Windows environments
+- To Do
+    - [ ] Move build commands from `tasks.json` into `CMakeLists.txt`, more make commands (Inspiration: [agfaps/build.md](https://github.com/agfaps/agriculture-monitoring-demo/blob/master/docs/build.md))
+    - [ ] Make into Dockerfile for the setup
+    - [ ] Explore other tools: Coverage Analysis (gcov & lcov), Cyclomatic Complexity Analysis (lizard), Memory Leak Detection (Valgrind), Static Code Analysis (CodeQL, cppcheck) (Inspiration: [agfaps/code-quality.md](https://github.com/agfaps/agriculture-monitoring-demo/blob/master/docs/code-quality.md))
+- Done
+    - [v] fix `ci.yml` through Github Actions
+- Non Priority
+    - [ ] Solve issue with GCov (expected to printout coverage test)
+    - [ ] Implement GDB Task
+    - [ ] Refactor foldering using `components/`. Make sure each components have their own `CMakeLists.txt`
+    - [ ] Consider adding `build_script.sh` and `build_script.cmd` to enable seamless build in Linux/Windows environments
